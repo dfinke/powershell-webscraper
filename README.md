@@ -5,12 +5,13 @@ A simple yet powerful PowerShell web scraper module that fetches and parses web 
 ## Features
 
 - **Easy to use**: Simple function interface with intuitive parameters
-- **Multiple output formats**: Extract text, links, images, or get all data at once
+- **Multiple output formats**: Extract text, links, images, tables, or get all data at once
 - **PowerShell native**: Built using PowerShell's built-in `Invoke-WebRequest` cmdlet
 - **Structured output**: Returns well-organized PowerShell objects for easy manipulation
 - **Error handling**: Robust error handling with informative messages
 - **Verbose support**: Optional verbose output for debugging
 - **WhatIf support**: Test functionality without making actual web requests
+- **Table extraction**: Extract HTML tables with headers, rows, and captions
 
 ## Installation
 
@@ -47,6 +48,9 @@ $links = Invoke-WebScraper -Url "https://example.com" -OutputFormat "Links"
 # Get only images
 $images = Invoke-WebScraper -Url "https://example.com" -OutputFormat "Images"
 
+# Get only tables
+$tables = Invoke-WebScraper -Url "https://example.com" -OutputFormat "Tables"
+
 # Get raw HTML
 $html = Invoke-WebScraper -Url "https://example.com" -OutputFormat "Raw"
 
@@ -75,7 +79,7 @@ Invoke-WebScraper -Url "https://example.com" -WhatIf
 
 **Parameters**:
 - `Url` (Required): The URL of the web page to scrape
-- `OutputFormat` (Optional): Output format - 'Text', 'Links', 'Images', 'All', or 'Raw' (Default: 'All')
+- `OutputFormat` (Optional): Output format - 'Text', 'Links', 'Images', 'Tables', 'All', or 'Raw' (Default: 'All')
 - `UserAgent` (Optional): Custom user agent string (Default: 'PowerShell WebScraper 1.0')
 
 **Returns**:
@@ -85,6 +89,7 @@ Invoke-WebScraper -Url "https://example.com" -WhatIf
   - `TextContent`: Clean text content
   - `Links`: Array of link objects with Text, Href, and AbsoluteUri
   - `Images`: Array of image objects with Alt, Src, and AbsoluteUri
+  - `Tables`: Array of table objects (see Tables format below)
   - `StatusCode`: HTTP status code
   - `ContentLength`: Content length in characters
   - `LastModified`: Last modified date from headers
@@ -93,6 +98,12 @@ Invoke-WebScraper -Url "https://example.com" -WhatIf
 - When `OutputFormat` is 'Text': Clean text content as string
 - When `OutputFormat` is 'Links': Array of link objects
 - When `OutputFormat` is 'Images': Array of image objects
+- When `OutputFormat` is 'Tables': Array of table objects with properties:
+  - `Index`: The position of the table on the page (0-based)
+  - `Caption`: The table caption (if available)
+  - `Headers`: Array of header column names
+  - `Rows`: Array of row data objects or arrays
+  - `RowCount`: Number of rows in the table
 - When `OutputFormat` is 'Raw': Raw HTML content as string
 
 ## Examples
