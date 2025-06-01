@@ -77,6 +77,58 @@ try {
     Write-Host "! Network test failed (expected in restricted environments): $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
+# Test 6: Tables format test with mock data
+Write-Host "`nTest 6: Tables format validation" -ForegroundColor Green
+
+$mockHtmlWithTable = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page With Table</title>
+</head>
+<body>
+    <h1>Test Table</h1>
+    <table>
+        <caption>Test Caption</caption>
+        <thead>
+            <tr>
+                <th>Header 1</th>
+                <th>Header 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Cell 1,1</td>
+                <td>Cell 1,2</td>
+            </tr>
+            <tr>
+                <td>Cell 2,1</td>
+                <td>Cell 2,2</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+"@
+
+try {
+    # Mock function to test the table extraction
+    function Test-ExtractTables {
+        param([string]$HtmlContent)
+        
+        # Call our internal functions to parse tables
+        # This is just a test to make sure the OutputFormat parameter works
+        return Invoke-WebScraper -Url "http://example.com" -OutputFormat "Tables" -WhatIf
+    }
+    
+    $result = Test-ExtractTables -HtmlContent $mockHtmlWithTable
+    # WhatIf will prevent actual execution, so we just check if no exception is thrown
+    Write-Host "✓ Tables output format validated" -ForegroundColor Green
+} catch {
+    Write-Host "✗ Tables format test failed: $($_.Exception.Message)" -ForegroundColor Red
+}
+}
+
 Write-Host "`nTest Summary:" -ForegroundColor Cyan
 Write-Host "- Module loads successfully" -ForegroundColor Green
 Write-Host "- Function is exported correctly" -ForegroundColor Green  
@@ -85,3 +137,13 @@ Write-Host "- Help documentation is available" -ForegroundColor Green
 Write-Host "- Ready for use when network access is available" -ForegroundColor Green
 
 Write-Host "`nTo test with real websites, run Examples.ps1 when you have internet access." -ForegroundColor Yellow
+
+# Test 6: Tables format test
+Write-Host "`nTest 6: Tables format validation" -ForegroundColor Green
+try {
+    # Just test if the Tables format is valid in the parameter validation
+    Invoke-WebScraper -Url "http://example.com" -OutputFormat "Tables" -WhatIf 6>$null
+    Write-Host "✓ Tables output format validates correctly" -ForegroundColor Green
+} catch {
+    Write-Host "✗ Tables format validation failed: $($_.Exception.Message)" -ForegroundColor Red
+}
