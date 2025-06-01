@@ -25,6 +25,9 @@ Write-Host 'Invoke-WebScraper -Url "https://example.com" -OutputFormat "Text"' -
 Write-Host "`n# Get only links:"
 Write-Host 'Invoke-WebScraper -Url "https://example.com" -OutputFormat "Links"' -ForegroundColor Green
 
+Write-Host "`n# Get tables from the page:"
+Write-Host 'Invoke-WebScraper -Url "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States" -OutputFormat "Tables"' -ForegroundColor Green
+
 Write-Host "`n# Test without making request:"
 Write-Host 'Invoke-WebScraper -Url "https://example.com" -WhatIf' -ForegroundColor Green
 
